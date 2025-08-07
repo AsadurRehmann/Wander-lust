@@ -1,0 +1,54 @@
+/* navbar */
+.navbar {
+    height: 5rem;
+    background-color: white;
+}
+
+.fa-compass {
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.nav-link {
+    color: black !important;
+}
+
+/* footer */
+.f-info-links a {
+    text-decoration: none;
+    color: black;
+}
+
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+
+.f-info {
+    display: flex;
+    height: 8rem;
+    background-color: rgb(218, 218, 218);
+    flex-wrap: wrap;
+    align-items: space-evenly;
+    justify-content: center;
+    text-align: center;
+}
+
+.f-info-links,
+.f-info-socials {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-info-socials {
+    font-size: 1.2rem;
+}
+
+.f-info-socials i {
+    margin-right: 0.5rem;
+}
+
+.f-info-brand{
+    
+}

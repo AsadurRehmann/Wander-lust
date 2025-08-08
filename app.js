@@ -79,6 +79,7 @@ app.put("/listing/:id", async (req, res) => {
     console.log("Holla");
     let { id } = req.params;
     await listing.findByIdAndUpdate(id, { ...req.body.listing });
+    console.log(req.body.listing.image);
     res.redirect(`/listing/${id}`);
 });
 

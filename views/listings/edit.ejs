@@ -6,23 +6,30 @@
                 <br><br>
                 <h1>Edit listing ...</h1>
 
-                <form action="/listing/<%=listingDetails._id%>?_method=PUT" method="post">
+                <form action="/listing/<%=listingDetails._id%>?_method=PUT" method="post" novalidate
+                    class="needs-validation">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" name="listing[title]" value="<%=listingDetails.title%>" class="form-control">
+                        <input type="text" name="listing[title]" value="<%=listingDetails.title%>" class="form-control"
+                            required>
+
+                        <div class="valid-feedback">Title looks good.</div>
+                        <div class="invalid-feedback">Title should be valid.</div>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea name="listing[description]"
-                            class="form-control"><%=listingDetails.description%></textarea>
+                        <textarea name="listing[description]" class="form-control"
+                            required><%=listingDetails.description%></textarea>
+
+                        <div class="invalid-feedback">Description should be valid.</div>
+
                     </div>
 
                     <div class="mb-3">
                         <label for="image" class="form-label">Image Link</label>
                         <input type="text" name="listing[image][url]" value="<%= listingDetails.image.url %>"
-                            class="form-control">
-                        <input type="hidden" name="listing[image][filename]"
-                            value="<%= listingDetails.image.filename %>">
+                            class="form-control" required>
+
 
 
                     </div>
@@ -30,21 +37,29 @@
                     <div class="mb-3">
                         <label for="Price" class="form-label">Price</label>
                         <input type="number" name="listing[price]" value="<%=listingDetails.price%>" class="
-                            form-control">
+                            form-control" required>
+
+                        <div class="invalid-feedback">Price should be valid.</div>
+                        <div class="valid-feedback">Price looks good.</div>
                     </div>
 
                     <div class="row">
                         <div class="mb-3 col-md-4">
-                            <label for="location" class="form-label">Location</label>
-                            <input type="text" name="listing[location]" value="<%=listingDetails.location%>" class="
-                            form-control">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" name="listing[country]" value="<%=listingDetails.country%>"
+                                class="form-control" required>
+
+                            <div class="invalid-feedback">Country name should be valid.</div>
+
+
                         </div>
 
                         <div class="mb-3 col-md-8">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" name="listing[location]" value="<%=listingDetails.location%>" class="
+                            form-control" required>
 
-                            <label for="country" class="form-label">Country</label>
-                            <input type="text" name="listing[country]" value="<%=listingDetails.country%>"
-                                class="form-control">
+                            <div class="invalid-feedback">Location should be valid.</div>
 
                         </div>
                     </div>

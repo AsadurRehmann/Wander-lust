@@ -14,11 +14,13 @@ const { listingSchema } = require("./schema.js");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-//for hopscotch
-app.use(cors());
+
+
 //for parsing data in reuests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+//for hopscotch
+app.use(cors());
 app.use(methodOverride("_method"));
 //to use static files like css for images
 app.use(express.static(path.join(__dirname, "/public")));
@@ -39,19 +41,37 @@ main()
     console.log(err);
   });
 
-app.get("/", (req, res) => {
-  res.send("Hollaaa");
-});
 
 const validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  // Check for validation errors
+
+  //check if body exist
+  if(!req.body){
+    return next(new expressError(400,"Request body is required."));
+  }
+
+  //check for empty listing object
+  if(!req.body.listing){
+    return next(new expressError(400,"Listing data is required."));
+  }
+
+  const { error } = listingSchema.validate(req.body);
+
   if (error) {
-    throw new expressError(400, error);
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new expressError(400, errMsg);
   } else {
     next();
   }
-}
+};
+
+app.use((req, res, next) => {
+  console.log("Request Body:", req.body);
+  next();
+});
+
+app.get("/", (req, res) => {
+  res.send("Hollaaa");
+});
 
 //listing Route
 app.get("/listing", wrapAsync(async (req, res) => {
@@ -64,8 +84,7 @@ app.get("/listing/new", (req, res) => {
   res.render("listings/new");
 });
 
-app.post("/listing",validateListing, wrapAsync(async (req, res,next) => {
-
+app.post("/listing", validateListing, wrapAsync(async (req, res) => {
   const newlisting = new listing(req.body.listing);
   await newlisting.save();
   res.redirect("/listing");
@@ -79,13 +98,9 @@ app.get("/listing/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 //update route to update in db and redirect to show details
-app.put("/listing/:id", wrapAsync(async (req, res) => {
-  if (!req.body || !req.body.listing) {
-    throw new expressError(400, "Send valid data.");
-  }
+app.put("/listing/:id", validateListing, wrapAsync(async (req, res) => {
   let { id } = req.params;
   await listing.findByIdAndUpdate(id, { ...req.body.listing });
-  console.log(req.body.listing.image);
   res.redirect(`/listing/${id}`);
 }));
 
@@ -123,7 +138,6 @@ app.get("/listing/:id", wrapAsync(async (req, res) => {
 // catches errors with other routes that are in this code similar to app.all("*" res, next) => {
 //     next(new expressError(404, "Page not found!"));
 // });)
-
 app.use((req, res, next) => {
   next(new expressError(404, "Page not found!"));
 });
@@ -131,8 +145,11 @@ app.use((req, res, next) => {
 //custom Error handler
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong." } = err;
+  console.error("Error in error handler:" + err);
   // res.status(statusCode).send(message);
-  res.status(statusCode).render("listings/error", { message });
+
+  res.status(statusCode).render("listings/error", { message, statusCode });
+  // console.log(message);
 });
 
 app.listen("8080", () => {

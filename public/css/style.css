@@ -114,3 +114,7 @@ body {
 .btns {
   display: flex;
 }
+
+.bi{
+  font-size: 2rem;
+}

@@ -1,34 +1,68 @@
 <% layout("/layouts/boilerplate") %>
 
-    <body>
-        <div class="row mt-3 mb-3">
-            <div class="col-8 offset-3">
-                <h3>Listing Details</h3>
-            </div>
-            <div class="card col-6 offset-3">
 
-                <img class="card-img-top show-img" src="<%=listingDetails.image%>" alt="listing_image">
+    <div class="row mt-3 mb-3">
+        <div class="col-8 offset-3">
+            <h3><b>
+                    <%= listingDetails.title %>
+                </b></h3>
+        </div>
+        <div class="card col-6 offset-3 listing-card">
+
+            <img class="card-img-top show-img" src="<%=listingDetails.image%>" alt="listing_image">
+            <div class="card-body">
+                <p class="card-text">
+                    <%= listingDetails.description %> <br>
+                        $<%= listingDetails.price.toLocaleString("en-PK") %> <br>
+                            <%= listingDetails.location %> <br>
+                                <%= listingDetails.country %>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="btns">
+            <a href="/listing/<%=listingDetails._id%>/edit" class="btn btn-dark col-1 offset-3">Edit</a>
+            <br>
+            <form action="/listing/<%=listingDetails._id%>?_method=DELETE" method="post">
+                <button class="btn btn-danger offset-3">Delete</button>
+            </form>
+        </div>
+
+        <div class="col-8 offset-3 mb-3 mt-3">
+            <hr>
+            <h4>Leave a review</h4>
+            <form action="/listing/<%=listingDetails.id%>/reviews" method="post" novalidate class="needs-validation">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="range" min="1" max="5" name="reviews[rating]" id="rating" class="form-range">
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comment</label>
+                    <textarea name="reviews[comment]" id="comment" cols="30" rows="5" class="form-control"
+                        required></textarea>
+                    <div class="invalid-feedback">Comment should be valid.</div>
+                </div>
+                <button class="btn btn-outline-dark">Submit</button>
+            </form>
+        </div>
+
+        <hr>
+
+        <p><b>All Reviews</b></p>
+        <div class="row ">
+        <%for(let review of listingDetails.reviews){%>
+            <div class="card col-5 ms-3 mb-3">
                 <div class="card-body">
+                    <h5 class="card-title">Jhon Doe</h5>
                     <p class="card-text">
-                        <b>
-                            <%= listingDetails.title %>
-                        </b><br>
-                        <%= listingDetails.description %> <br>
-                            $<%= listingDetails.price.toLocaleString("en-PK") %> <br>
-                                <%= listingDetails.location %> <br>
-                                    <%= listingDetails.country %>
+                        <%=review.comment%>
+                    </p>
+                    <p class="card-text">
+                        <%=review.rating%> stars
                     </p>
                 </div>
-
             </div>
-
-            <div class="btns">
-                <a href="/listing/<%=listingDetails._id%>/edit" class="btn btn-dark col-1 offset-3">Edit</a>
-                <br>
-                <form action="/listing/<%=listingDetails._id%>?_method=DELETE" method="post">
-                    <button class="btn btn-danger offset-3">Delete</button>
-                </form>
+            <%}%>
             </div>
-            </div>
-        </div>
-    </body>
+    </div>

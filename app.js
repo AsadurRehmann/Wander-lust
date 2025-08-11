@@ -9,7 +9,8 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const expressError = require("./utils/expressError.js");
 const cors = require("cors"); //for hopscotch
 const Joi = require("joi"); //for server side schema validation
-const { listingSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
+const Review = require("./models/review.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -41,17 +42,17 @@ main()
     console.log(err);
   });
 
-
+//for validate listing with Joi schema
 const validateListing = (req, res, next) => {
 
   //check if body exist
-  if(!req.body){
-    return next(new expressError(400,"Request body is required."));
+  if (!req.body) {
+    return next(new expressError(400, "Request body is required."));
   }
 
   //check for empty listing object
-  if(!req.body.listing){
-    return next(new expressError(400,"Listing data is required."));
+  if (!req.body.listing) {
+    return next(new expressError(400, "Listing data is required."));
   }
 
   const { error } = listingSchema.validate(req.body);
@@ -64,10 +65,23 @@ const validateListing = (req, res, next) => {
   }
 };
 
-app.use((req, res, next) => {
-  console.log("Request Body:", req.body);
-  next();
-});
+//for validate review with Joi schema
+const validateReview = (req, res, next) => {
+  //check if body exist
+  if (!req.body) {
+    return next(new expressError(400, "Request body is required."));
+  }
+
+  const { error } = reviewSchema.validate(req.body);
+
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new expressError(400, errMsg);
+  } else {
+    next();
+  }
+};
+
 
 app.get("/", (req, res) => {
   res.send("Hollaaa");
@@ -112,10 +126,23 @@ app.delete("/listing/:id", wrapAsync(async (req, res) => {
   res.redirect("/listing");
 }));
 
+//review post route
+app.post("/listing/:id/reviews", validateReview, wrapAsync(async (req, res) => {
+
+  let listingRev = await listing.findById(req.params.id);
+  let newReview = new Review(req.body.reviews);
+
+  listingRev.reviews.push(newReview);
+  await newReview.save();
+  await listingRev.save();
+
+  res.redirect(`/listing/${req.params.id}`)
+}));
+
 //Show details Route
 app.get("/listing/:id", wrapAsync(async (req, res) => {
   let { id } = req.params;
-  const listingDetails = await listing.findById(id);
+  const listingDetails = await listing.findById(id).populate("reviews");
   res.render("listings/show", { listingDetails });
 }));
 

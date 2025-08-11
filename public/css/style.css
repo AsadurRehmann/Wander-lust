@@ -51,9 +51,11 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .f-info-links a {
   padding-left: 1rem;
 }
+
 .f-info-socials {
   font-size: 1.2rem;
 }
@@ -93,6 +95,7 @@ body {
 .card-img-overlay {
   opacity: 0;
 }
+
 .card-img-overlay:hover {
   opacity: 0.2;
   background-color: white;
@@ -115,6 +118,6 @@ body {
   display: flex;
 }
 
-.bi{
+.bi {
   font-size: 2rem;
 }

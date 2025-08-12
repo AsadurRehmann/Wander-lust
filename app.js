@@ -6,9 +6,10 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const expressError = require("./utils/expressError.js");
 const cors = require("cors"); //for hopscotch
-
-const listingRoute=require("./routes/listing.js");
-const reviewsRoute=require("./routes/review.js");
+const session = require("express-session");
+const listingRoute = require("./routes/listing.js");
+const reviewsRoute = require("./routes/review.js");
+const flash=require("connect-flash");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -38,12 +39,34 @@ main()
     console.log(err);
   });
 
-// app.get("/", (req, res) => {
-//   res.send("Hollaaa");
-// });
+//using sessions
+const sessionOptions = {
+  secret: "mysecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  },
+};
 
-app.use("/listing",listingRoute);
-app.use("/listing/:id/reviews",reviewsRoute);
+app.get("/", (req, res) => {
+  res.send("Hollaaa");
+});
+//using seesion and flash
+app.use(session(sessionOptions));
+app.use(flash());
+
+//using flash for creating success and failure partials
+app.use((req,res,next)=>{
+res.locals.success=req.flash("success");
+res.locals.error=req.flash("error");
+next();//next will call the listing route
+});
+
+app.use("/listing", listingRoute);
+app.use("/listing/:id/reviews", reviewsRoute);
 
 // catches errors with other routes that are in this code similar to app.all("*" res, next) => {
 //     next(new expressError(404, "Page not found!"));

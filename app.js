@@ -7,9 +7,15 @@ const ejsMate = require("ejs-mate");
 const expressError = require("./utils/expressError.js");
 const cors = require("cors"); //for hopscotch
 const session = require("express-session");
+
 const listingRoute = require("./routes/listing.js");
 const reviewsRoute = require("./routes/review.js");
+const userRoute = require("./routes/user.js");
+
 const flash=require("connect-flash");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -58,6 +64,13 @@ app.get("/", (req, res) => {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 //using flash for creating success and failure partials
 app.use((req,res,next)=>{
 res.locals.success=req.flash("success");
@@ -65,8 +78,19 @@ res.locals.error=req.flash("error");
 next();//next will call the listing route
 });
 
+// app.get("/demouser",async(req,res)=>{
+//   let fakeUser=new User({
+//     email:"student@gmail.com",
+//     username:"delta-student",
+//   });
+
+//   let registeredUser=await User.register(fakeUser,"helloworld");
+//   res.send(registeredUser);
+// });
+
 app.use("/listing", listingRoute);
 app.use("/listing/:id/reviews", reviewsRoute);
+app.use("/",userRoute);
 
 // catches errors with other routes that are in this code similar to app.all("*" res, next) => {
 //     next(new expressError(404, "Page not found!"));

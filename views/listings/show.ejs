@@ -12,10 +12,21 @@
             <img class="card-img-top show-img" src="<%=listingDetails.image%>" alt="listing_image">
             <div class="card-body">
                 <p class="card-text">
-                    <%= listingDetails.description %> <br>
-                        $<%= listingDetails.price.toLocaleString("en-PK") %> <br>
-                            <%= listingDetails.location %> <br>
-                                <%= listingDetails.country %>
+                    Owned By:
+                    <b> <i>
+                            <%= listingDetails.owner.username%>
+                        </i></b>
+                </p>
+                <p class="card-text">
+                    <%= listingDetails.description %>
+                </p>
+                <p class="card-text"> $<%= listingDetails.price.toLocaleString("en-PK") %>
+                </p>
+                <p class="card-text">
+                    <%= listingDetails.location %>
+                </p>
+                <p class="card-text">
+                    <%= listingDetails.country %>
                 </p>
             </div>
 

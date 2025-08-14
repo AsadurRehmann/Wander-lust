@@ -9,11 +9,8 @@ const listingSchema = new schema({
   },
   description: String,
   image: {
-    type: String,
-    default: "https://images.unsplash.com/photo-1743093032165-085be78f7278?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    set: (v) =>
-      v === "" ? "https://images.unsplash.com/photo-1743093032165-085be78f7278?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" : v
-
+    url: String,
+    filename: String,
   },
   price: Number,
   location: String,
@@ -24,9 +21,9 @@ const listingSchema = new schema({
       ref: "Review",
     },
   ],
-  owner:{
-    type:schema.Types.ObjectId,
-    ref:"User"
+  owner: {
+    type: schema.Types.ObjectId,
+    ref: "User"
   },
 });
 

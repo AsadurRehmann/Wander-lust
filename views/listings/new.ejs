@@ -6,7 +6,7 @@
                 <br><br>
                 <h3>Add new listing here ...</h3>
 
-                <form action="/listing" method="post" novalidate class="needs-validation" enctype="application/x-www-form-urlencoded">
+                <form action="/listing" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" name="listing[title]" class="form-control" required>
@@ -24,14 +24,10 @@
                         <div class="invalid-feedback">Description should be valid.</div>
                     </div>
 
-
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Image Link</label>
-                        <input type="text" name="listing[image]" class="form-control">
-
-
+                     <div class="mb-3">
+                        <label for="image" class="form-label">Upload listing image</label>
+                        <input type="file" name="listing[image]" class="form-control">
                     </div>
-
 
                     <div class="mb-3">
                         <label for="Price" class="form-label">Price</label>
@@ -42,7 +38,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="country" class="form-label">Country</label>
-                            <input type="text" name="listing[country]'" class="form-control" required>
+                            <input type="text" name="listing[country]" class="form-control" required>
 
                             <div class="invalid-feedback">Country name should be valid.</div>
 
@@ -63,4 +59,3 @@
                 <br><br>
             </div>
         </div>
- 

@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !="production"){
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -20,8 +24,7 @@ const User=require("./models/user.js");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-//for parsing data in reuests
-app.use(express.json());
+//for parsing data in reqests
 app.use(express.urlencoded({ extended: true }));
 //for hopscotch
 app.use(cors());

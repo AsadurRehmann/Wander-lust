@@ -11,7 +11,7 @@ const ejsMate = require("ejs-mate");
 const expressError = require("./utils/expressError.js");
 const cors = require("cors"); //for hopscotch
 const session = require("express-session");
-
+const MongoStore = require('connect-mongo');
 const listingRoute = require("./routes/listing.js");
 const reviewsRoute = require("./routes/review.js");
 const userRoute = require("./routes/user.js");
@@ -34,10 +34,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 //to use ejs-mate for boilerplates like nav bar or footers etc
 app.engine("ejs", ejsMate);
 
-const DB_URL = "mongodb://127.0.0.1:27017/wonderlust";
+// const DB_URL = "mongodb://127.0.0.1:27017/wonderlust";
+const dbUrl=process.env.ATLASDB_URL;
 
 async function main() {
-  await mongoose.connect(DB_URL);
+  await mongoose.connect(dbUrl);
 }
 
 main()
@@ -48,9 +49,22 @@ main()
     console.log(err);
   });
 
+const store=MongoStore.create({
+  mongoUrl:dbUrl,
+  crypto:{
+    secret:process.env.SECRET,
+  },
+  touchAfter:24*3600,
+});
+
+store.on("error",()=>{
+  console.log("ERROR IN MONGO SESSION",err);
+});
+
 //using sessions
 const sessionOptions = {
-  secret: "mysecret",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -60,9 +74,12 @@ const sessionOptions = {
   },
 };
 
-app.get("/", (req, res) => {
-  res.send("Hollaaa");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hollaaa");
+// });
+
+
+
 //using seesion and flash
 app.use(session(sessionOptions));
 app.use(flash());

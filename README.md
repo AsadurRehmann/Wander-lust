@@ -114,6 +114,4 @@ wanderlust/
 ## 👨‍💻 Author
 
 **Asad ur Rehman**
----
 
-Would you like me to **add sample screenshots placeholders** (like Markdown image tags) and a **contribution/license section**, or do you prefer keeping it short and clean?

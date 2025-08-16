@@ -74,10 +74,9 @@ const sessionOptions = {
   },
 };
 
-// app.get("/", (req, res) => {
-//   res.send("Hollaaa");
-// });
-
+app.get("/", (req, res) => {
+  res.redirect("/listing");
+});
 
 
 //using seesion and flash

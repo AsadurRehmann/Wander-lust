@@ -23,27 +23,47 @@ module.exports.showListing = async (req, res) => {
 };
 
 module.exports.createListing = async (req, res) => {
-    console.log("hits1");
     let response = await geocodingClient
          .forwardGeocode({
             query: req.body.listing.location,
             limit: 1
         })
         .send()
-         console.log("hits2");
     let url = req.file.path;
     let filename = req.file.filename;
     const newlisting = new listing(req.body.listing);
     newlisting.owner = req.user._id;  //to add the owner property to new listing
     newlisting.image = { url, filename };
-     console.log("hits3");
-
     newlisting.geometry=response.body.features[0].geometry;//this value is coming from mapbox
-
     await newlisting.save();
     req.flash("success", "New listing created!");
     res.redirect("/listing");
 }
+
+module.exports.filterByCategory=async(req,res)=>{
+    const category=req.params.category;
+    const filteredListings =await listing.find({category});
+    if (!filteredListings .length) {
+        req.flash("error", `No listings found in ${category} category`);
+        return res.redirect("/listing");
+    }
+    res.render("listings/index", { allListings: filteredListings  });
+}
+
+module.exports.searchListings = async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) {
+    req.flash("error", "Please enter a search term");
+    return res.redirect("/listing");
+  }
+  const results = await listing.find(
+    { $text: { $search: q } },
+    { score: { $meta: "textScore" } }
+  ).sort({ score: { $meta: "textScore" } });
+
+  res.render("listings/index", { allListings: results });
+};
 
 module.exports.editListing = async (req, res) => {
 

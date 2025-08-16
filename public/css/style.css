@@ -189,3 +189,54 @@ body {
       align-items: center;
       display: flex;
     }
+
+/* navbar toggler for mobiles */
+.navbar-collapse.collapsing,
+.navbar-collapse.show {
+  background-color: white; /* theme color */
+  transition: background-color 0.2s ease-in-out;
+}
+
+  /* Custom button theme */
+.filter-btn {
+  color: #fe424d;
+  border-color: #fe424d;
+}
+
+.filter-btn:hover,
+.filter-btn:focus {
+  background-color: #fe424d;
+  color: #fff;
+  border-color: #fe424d;
+}
+
+#filter-links{
+    text-decoration: none;
+    color: inherit;
+  }
+
+/* for show.ejs in mobiles */
+    /* Make map smaller on small screens */
+@media (min-width: 768px) {
+  #map {
+    height: 400px !important;
+  }
+}
+
+/* Ensure stars wrap correctly in reviews */
+.starability-result {
+  display: inline-block;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Buttons row on mobile */
+.btns {
+  flex-direction: column;
+}
+@media (min-width: 768px) {
+  .btns {
+    flex-direction: row;
+  }
+}

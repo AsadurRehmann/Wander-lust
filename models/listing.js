@@ -35,7 +35,12 @@ const listingSchema = new schema({
       type: [Number],
       required: true
     }
-  }
+  },
+  category:{
+    type:String,
+    enum:["All","Rooms","Iconic Cities","Mountains","Castles","Amazing Pools","Camping","Farms","Arctic","Boats"],
+    required:true,
+  },
 });
 
 //for deleting the reviews of deleted listing
@@ -45,6 +50,7 @@ listingSchema.post("findOneAndDelete", async function (doc) {
   }
 });
 
+listingSchema.index({ title: "text", location: "text" });
 
 const listing = mongoose.model("listing", listingSchema);
 module.exports = listing;

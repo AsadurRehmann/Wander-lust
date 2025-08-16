@@ -16,11 +16,16 @@
             <p class="card-text">
                 Owned By: <b><i><%= listingDetails.owner.username%></i></b>
             </p>
+
             <p class="card-text">Description<b> <%= listingDetails.description %></b>:</p>
             <p class="card-text">Price:<b> $<%= listingDetails.price.toLocaleString("en-PK") %></b></p>
             <p class="card-text">Location<b>: <%= listingDetails.location %></b></p>
             <p class="card-text">Country<b>: <%= listingDetails.country %></b></p>
             <p class="card-text">Category<b>: <%= listingDetails.category %></b></p>
+            <p class="card-text"><%= listingDetails.description %></p>
+            <p class="card-text">$<%= listingDetails.price.toLocaleString("en-PK") %></p>
+            <p class="card-text"><%= listingDetails.location %></p>
+            <p class="card-text"><%= listingDetails.country %></p>
         </div>
     </div>
 

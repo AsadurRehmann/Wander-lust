@@ -98,6 +98,9 @@ res.locals.currUser=req.user;
 next();//next will call the listing route
 });
 
+app.get('/', (req, res) => {
+  res.redirect('/listing');
+});
 
 app.use("/listing", listingRoute);
 app.use("/listing/:id/reviews", reviewsRoute);

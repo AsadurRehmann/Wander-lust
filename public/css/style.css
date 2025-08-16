@@ -210,10 +210,12 @@ body {
   border-color: #fe424d;
 }
 
+
 #filter-links{
     text-decoration: none;
     color: inherit;
   }
+
 
 /* for show.ejs in mobiles */
     /* Make map smaller on small screens */
@@ -239,4 +241,8 @@ body {
   .btns {
     flex-direction: row;
   }
+
 }
+
+}
+

@@ -43,7 +43,7 @@ module.exports.createListing = async (req, res) => {
 module.exports.filterByCategory=async(req,res)=>{
     const category=req.params.category;
     const filteredListings =await listing.find({category});
-    if (!filteredListings .length) {
+    if (!filteredListings.length) {
         req.flash("error", `No listings found in ${category} category`);
         return res.redirect("/listing");
     }

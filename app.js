@@ -98,6 +98,13 @@ res.locals.currUser=req.user;
 next();//next will call the listing route
 });
 
+// Temporary route to get user IDs - remove after getting the ID
+app.get('/get-users', async (req, res) => {
+    const User = require('./models/user.js');
+    const users = await User.find({});
+    res.json(users);
+});
+
 app.get('/', (req, res) => {
   res.redirect('/listing');
 });
@@ -112,6 +119,7 @@ app.use("/",userRoute);
 app.use((req, res, next) => {
   next(new expressError(404, "Page not found!"));
 });
+
 
 //custom Error handler
 app.use((err, req, res, next) => {
